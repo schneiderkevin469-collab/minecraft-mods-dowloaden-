@@ -1,92 +1,266 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <title>CoolMods</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" href="favicon.png">
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>CoolMods</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="favicon.png">
+
+<style>
+body{
+  margin:0;
+  font-family:Inter,Arial,sans-serif;
+  background:#020617;
+  color:#e5e7eb;
+  display:flex;
+}
+
+/* Sidebar */
+.sidebar{
+  width:220px;
+  background:#020617;
+  border-right:1px solid #1e293b;
+  padding:20px;
+  position:fixed;
+  height:100vh;
+}
+.sidebar h2{color:#38bdf8;}
+.sidebar a{
+  display:block;
+  color:#cbd5f5;
+  text-decoration:none;
+  margin:12px 0;
+  font-weight:700;
+}
+.sidebar a:hover{color:#38bdf8;}
+
+/* Content */
+.content{
+  margin-left:240px;
+  padding:20px;
+  width:100%;
+  max-width:1000px;
+}
+
+/* Suche */
+#searchInput{
+  width:100%;
+  padding:12px;
+  border-radius:12px;
+  border:none;
+  font-size:16px;
+  margin-bottom:20px;
+}
+
+/* Karten */
+.card{
+  background:#0f172a;
+  padding:20px;
+  border-radius:20px;
+  margin-bottom:30px;
+  box-shadow:0 0 20px rgba(56,189,248,0.15);
+}
+
+button{
+  padding:10px 18px;
+  border:none;
+  border-radius:999px;
+  background:#38bdf8;
+  color:#020617;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.badge{
+  background:#facc15;
+  color:#020617;
+  padding:6px 14px;
+  border-radius:999px;
+  font-weight:800;
+  display:inline-block;
+}
+
+.rating span{
+  font-size:22px;
+  cursor:pointer;
+  color:#475569;
+}
+.rating span.active{color:#facc15;}
+
+/* Stats */
+.stats{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:15px;
+}
+.stat{
+  background:#020617;
+  border:1px solid #1e293b;
+  padding:15px;
+  border-radius:16px;
+  text-align:center;
+  font-weight:800;
+}
+
+/* Popup */
+.popup-bg{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.7);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+}
+.popup{
+  background:#0f172a;
+  padding:30px;
+  border-radius:20px;
+  text-align:center;
+}
+
+/* Feuerwerk */
+.firework{
+  position:fixed;
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  animation:explode 1.6s ease-out forwards;
+  z-index:10000;
+}
+@keyframes explode{
+  to{
+    transform:translate(var(--x),var(--y)) scale(0);
+    opacity:0;
+  }
+}
+img{
+  border-radius:12px;
+}
+</style>
 </head>
 
 <body onload="init()">
 
+<!-- SIDEBAR -->
 <div class="sidebar">
   <h2>🔥 CoolMods</h2>
-  <a onclick="openTab('resourcepacks')">Resourcepacks</a>
-  <a onclick="openTab('mods')">Mods</a>
-  <a onclick="openTab('shaders')">Shaders</a>
-  <a onclick="openTab('datapacks')">Datapacks</a>
-  <a onclick="openTab('stats')">Statistiken</a>
+  <a href="#" onclick="openTab('resourcepacks')">Resourcepacks</a>
+  <a href="#" onclick="openTab('mods')">Mods</a>
+  <a href="#" onclick="openTab('shaders')">Shaders</a>
+  <a href="#" onclick="openTab('datapacks')">Datapacks</a>
+  <a href="#" onclick="openTab('stats')">Statistiken</a>
 </div>
 
+<!-- CONTENT -->
 <div class="content">
 
-<input id="searchInput" placeholder="🔍 Suche nach Inhalten...">
+<!-- SUCHE -->
+<input type="text" id="searchInput" placeholder="🔍 Suche nach Mods, Resourcepacks, Shaders, Datapacks...">
 
+<!-- COUNTDOWN -->
 <div id="countdown" class="card">
-  <h2>⏳ Angel-Mod Release</h2>
-  <p id="countdownTimer"></p>
+  <h2>⏳ Angel-Mod Release Countdown</h2>
+  <p id="countdownTimer" style="font-size:20px;font-weight:800;">Lädt...</p>
 </div>
 
 <!-- RESOURCEPACKS -->
 <div id="resourcepacks" class="tabcontent">
-  <div class="card">
+  <section class="card">
     <h2>🎆 Silvester-Resourcepack</h2>
-    <p>⬇ Downloads: <span id="dl-silvester">0</span></p>
-    <div class="rating" data-rate="silvester"></div>
-    <button onclick="downloadSilvester()">Download</button>
-  </div>
+    <p>Feuerwerk-Sounds, Texturen & Silvester-Designs</p>
+    <div class="rating">
+      <span onclick="rate('resourcepacks',1)">★</span>
+      <span onclick="rate('resourcepacks',2)">★</span>
+      <span onclick="rate('resourcepacks',3)">★</span>
+      <span onclick="rate('resourcepacks',4)">★</span>
+      <span onclick="rate('resourcepacks',5)">★</span>
+    </div>
+    <p>⬇ Downloads: <span id="downloads">0</span></p>
+    <button onclick="downloadSilvester()">Download Silvester-Resourcepack</button>
+  </section>
 
-  <div class="card">
-    <h2>🎣 Angel-Mod</h2>
-    <span class="badge" id="angelBadge">IN ARBEIT</span>
-    <p>📅 Release: 01.01.2026 – 00:00</p>
-    <div class="rating" data-rate="angel"></div>
-    <button id="angelBtn" onclick="downloadAngel()">Download</button>
-  </div>
+  <section class="card" id="angelModCard">
+    <h2>⚒ Angel-Mod</h2>
+    <p>Neue Angelmechaniken & seltene Fische</p>
+    <div class="badge" id="angelBadge">IN ARBEIT</div>
+    <div class="rating">
+      <span onclick="rate('angelMod',1)">★</span>
+      <span onclick="rate('angelMod',2)">★</span>
+      <span onclick="rate('angelMod',3)">★</span>
+      <span onclick="rate('angelMod',4)">★</span>
+      <span onclick="rate('angelMod',5)">★</span>
+    </div>
+    <p style="margin-top:10px;color:#facc15;font-weight:800">📅 Release: 01.01.2026 00:00 Uhr</p>
+    <button id="angelDownloadBtn" style="display:none;" onclick="downloadAngel()">Download Angel-Mod</button>
+  </section>
 </div>
 
 <!-- MODS -->
 <div id="mods" class="tabcontent">
-  <div class="card">
+  <section class="card">
     <h2>🧱 Mods</h2>
-    <span class="badge">IN ARBEIT</span>
-    <div class="rating" data-rate="mods"></div>
-  </div>
+    <p>Derzeit keine Mods verfügbar.</p>
+    <p class="badge">IN ARBEIT</p>
+    <div class="rating">
+      <span onclick="rate('mods',1)">★</span>
+      <span onclick="rate('mods',2)">★</span>
+      <span onclick="rate('mods',3)">★</span>
+      <span onclick="rate('mods',4)">★</span>
+      <span onclick="rate('mods',5)">★</span>
+    </div>
+  </section>
 </div>
 
 <!-- SHADERS -->
 <div id="shaders" class="tabcontent">
-  <div class="card">
-    <h2>🌈 Complementary Reimagined</h2>
-    <img src="shaders/preview.jpg" onclick="showImage(this.src)">
-    <p>⬇ Downloads: <span id="dl-shader">0</span></p>
-    <div class="rating" data-rate="shader"></div>
-    <button onclick="downloadShader()">Download</button>
-  </div>
+  <section class="card">
+    <h2>📷 Shaders</h2>
+    <p>ComplementaryReimagined_r5.6.1 Shader</p>
+    <img src="shaders/preview.jpg" alt="Shader Vorschau" style="width:200px;cursor:pointer;" onclick="showImage('shaders/preview.jpg')">
+    <p class="badge" id="shaderBadge">Verfügbar</p>
+    <p>⬇ Downloads: <span id="shaderDownloads">0</span></p>
+    <div class="rating">
+      <span onclick="rate('shader',1)">★</span>
+      <span onclick="rate('shader',2)">★</span>
+      <span onclick="rate('shader',3)">★</span>
+      <span onclick="rate('shader',4)">★</span>
+      <span onclick="rate('shader',5)">★</span>
+    </div>
+    <button id="shaderDownloadBtn" onclick="downloadShader()">Download Shader</button>
+  </section>
 </div>
 
 <!-- DATAPACKS -->
 <div id="datapacks" class="tabcontent">
-  <div class="card">
-    <h2>📦 Hello Datapack</h2>
-    <p>⬇ Downloads: <span id="dl-datapack">0</span></p>
-    <div class="rating" data-rate="datapack"></div>
-    <button onclick="downloadDatapack()">Download</button>
-  </div>
+  <section class="card">
+    <h2>📦 Datapacks</h2>
+    <p>hello datapack</p>
+    <p class="badge" id="datapackBadge">Verfügbar</p>
+    <p>⬇ Downloads: <span id="datapackDownloads">0</span></p>
+    <div class="rating">
+      <span onclick="rate('datapack',1)">★</span>
+      <span onclick="rate('datapack',2)">★</span>
+      <span onclick="rate('datapack',3)">★</span>
+      <span onclick="rate('datapack',4)">★</span>
+      <span onclick="rate('datapack',5)">★</span>
+    </div>
+    <button id="datapackDownloadBtn" onclick="downloadDatapack()">Download Datapack</button>
+  </section>
 </div>
 
 <!-- STATS -->
 <div id="stats" class="tabcontent card">
   <h2>📊 Statistiken</h2>
   <div class="stats">
-    <div class="stat">⬇ Gesamt<br><span id="totalDl">0</span></div>
+    <div class="stat">⬇ Downloads<br><span id="totalDownloads">0</span></div>
+    <div class="stat">⭐ Bewertung<br><span id="avgRating">0 / 5</span></div>
+    <div class="stat">🟢 Mods verfügbar<br>0</div>
     <div class="stat">🎨 Resourcepacks<br>2</div>
-    <div class="stat">📷 Shader<br>1</div>
+    <div class="stat">📷 Shaders<br>1</div>
     <div class="stat">📦 Datapacks<br>1</div>
+    <div class="stat">🟡 In Arbeit<br>1</div>
   </div>
-</div>
-
 </div>
 
 <!-- POPUPS -->
@@ -97,10 +271,180 @@
   </div>
 </div>
 
-<div id="imgPopup" class="popup-bg" onclick="this.style.display='none'">
-  <img id="popupImg">
+<div id="imagePopup" class="popup-bg" onclick="closeImagePopup()">
+  <img id="popupImg" src="" style="max-width:90%;max-height:80%;border-radius:20px;">
 </div>
 
-<script src="script.js"></script>
+<script>
+// INIT
+function init(){
+  // Downloads
+  const d = Number(localStorage.getItem("downloads")) || 0;
+  const sd = Number(localStorage.getItem("shaderDownloads")) || 0;
+  const dd = Number(localStorage.getItem("datapackDownloads")) || 0;
+
+  document.getElementById("downloads").textContent = d;
+  document.getElementById("totalDownloads").textContent = d;
+  document.getElementById("shaderDownloads").textContent = sd;
+  document.getElementById("datapackDownloads").textContent = dd;
+
+  // Bewertungen laden
+  ['resourcepacks','angelMod','mods','shader','datapack'].forEach(cat=>{
+    const r = Number(localStorage.getItem('rating_'+cat)) || 0;
+    updateRating(cat,r);
+  });
+
+  startCountdown();
+  openTab('resourcepacks'); // Standard-Tab
+}
+
+// DOWNLOADS
+function downloadSilvester(){
+  let d = Number(localStorage.getItem("downloads") || 0) + 1;
+  localStorage.setItem("downloads", d);
+  document.getElementById("downloads").textContent = d;
+  document.getElementById("totalDownloads").textContent = d;
+  const link = document.createElement("a");
+  link.href = "resourcepacks/silvester-resourcepack.zip";
+  link.download = "silvester-resourcepack.zip";
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+function downloadAngel(){
+  const link = document.createElement("a");
+  link.href = "resourcepacks/angel_mod.zip";
+  link.download = "angel_mod.zip";
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+function downloadShader(){
+  let sd = Number(localStorage.getItem("shaderDownloads") || 0) + 1;
+  localStorage.setItem("shaderDownloads", sd);
+  document.getElementById("shaderDownloads").textContent = sd;
+
+  const link = document.createElement("a");
+  link.href = "shaders/ComplementaryReimagined_r5.6.1.zip";
+  link.download = "ComplementaryReimagined_r5.6.1.zip";
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+function downloadDatapack(){
+  let dd = Number(localStorage.getItem("datapackDownloads") || 0) + 1;
+  localStorage.setItem("datapackDownloads", dd);
+  document.getElementById("datapackDownloads").textContent = dd;
+
+  const link = document.createElement("a");
+  link.href = "datapacks/hello datapack.zip";
+  link.download = "hello datapack.zip";
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+// BEWERTUNG
+function rate(category, n){
+  localStorage.setItem("rating_"+category,n);
+  updateRating(category,n);
+}
+function updateRating(category,n){
+  document.querySelectorAll(`#${category} .rating span`).forEach((s,i)=>{
+    s.classList.toggle("active", i < n);
+  });
+}
+
+// COUNTDOWN + ANGEL-MOD FREIGABE
+function startCountdown(){
+  const releaseDate = new Date("2026-01-01T00:00:00");
+  const countdownEl = document.getElementById("countdownTimer");
+
+  const interval = setInterval(() => {
+    const now = new Date();
+    const diff = releaseDate - now;
+
+    if(diff <= 0){
+      clearInterval(interval);
+      countdownEl.textContent = "🎉 Angel-Mod ist erschienen!";
+      showReleasePopup();
+      enableAngelDownload();
+      return;
+    }
+
+    const days = Math.floor(diff / (1000*60*60*24));
+    const hours = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
+    const minutes = Math.floor((diff % (1000*60*60)) / (1000*60));
+    const seconds = Math.floor((diff % (1000*60)) / 1000);
+
+    countdownEl.textContent = `${days} Tage ${hours} Std ${minutes} Min ${seconds} Sek`;
+  }, 1000);
+}
+
+function enableAngelDownload(){
+  document.getElementById("angelBadge").style.display="none";
+  document.getElementById("angelDownloadBtn").style.display="inline-block";
+}
+
+// FEUERWERK
+function showReleasePopup(){
+  document.getElementById("releasePopup").style.display="flex";
+  releaseFireworks();
+}
+function closePopup(){ document.getElementById("releasePopup").style.display="none"; }
+function launchFirework(x,y){
+  const c=["#38bdf8","#22c55e","#facc15","#f97316","#a855f7"];
+  for(let i=0;i<30;i++){
+    const p=document.createElement("div");
+    p.className="firework";
+    p.style.left=x+"px";
+    p.style.top=y+"px";
+    p.style.background=c[Math.floor(Math.random()*c.length)];
+    const a=Math.random()*2*Math.PI,r=120+Math.random()*80;
+    p.style.setProperty("--x",Math.cos(a)*r+"px");
+    p.style.setProperty("--y",Math.sin(a)*r+"px");
+    document.body.appendChild(p);
+    setTimeout(()=>p.remove(),1600);
+  }
+}
+function releaseFireworks(){
+  const s=Date.now();
+  const i=setInterval(()=>{
+    launchFirework(Math.random()*innerWidth,Math.random()*innerHeight*0.6);
+    if(Date.now()-s>10000) clearInterval(i);
+  },350);
+}
+
+// IMAGE POPUP
+function showImage(src){
+  const popup = document.getElementById("imagePopup");
+  const img = document.getElementById("popupImg");
+  img.src = src;
+  popup.style.display = "flex";
+}
+function closeImagePopup(){
+  document.getElementById("imagePopup").style.display = "none";
+}
+
+// SIDEBAR TABS
+function openTab(tabName){
+  document.querySelectorAll(".tabcontent").forEach(tc=>tc.style.display="none");
+  document.getElementById(tabName).style.display="block";
+}
+
+// SUCHE
+document.getElementById("searchInput").addEventListener("input", function(){
+  const query = this.value.toLowerCase();
+  document.querySelectorAll(".tabcontent .card").forEach(card=>{
+    const title = card.querySelector("h2") ? card.querySelector("h2").textContent.toLowerCase() : "";
+    const desc = card.querySelector("p") ? card.querySelector("p").textContent.toLowerCase() : "";
+    card.style.display = (title.includes(query) || desc.includes(query)) ? "block" : "none";
+  });
+});
+</script>
+
 </body>
 </html>
